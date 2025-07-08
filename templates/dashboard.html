@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+ <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+</head>
+<body>
+
+<h2>Welcome, {{ session['username'] }}</h2>
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<form method="GET">
+  Search: <input type="text" name="search" value="{{ request.args.get('search', '') }}">
+  Category: <input type="text" name="category" value="{{ request.args.get('category', '') }}">
+  <button type="submit">Filter</button>
+</form>
+
+<h3>Create New Post</h3>
+<form method="POST" action="/add_post" enctype="multipart/form-data">
+  Title: <input type="text" name="title"><br>
+  Category: <input type="text" name="category"><br>
+  Content: <textarea name="content"></textarea><br>
+  Link: <input type="text" name="link"><br>
+  Upload Doc: <input type="file" name="doc"><br>
+  <button type="submit">Add Post</button>
+</form>
+
+<h3>Posts</h3>
+{% for post in posts %}
+  <div style="border:1px solid #ccc; margin-bottom:10px; padding:10px;">
+    <strong>{{ post[3] }}</strong> ({{ post[2] }})<br>
+    <p>{{ post[4] }}</p>
+    {% if post[5] %}
+      <a href="{{ post[5] }}" target="_blank">Link</a><br>
+    {% endif %}
+    {% if post[6] %}
+      <a href="{{ url_for('static', filename=post[6].split('static/')[-1]) }}" download>Download Document</a>
+    {% endif %}
+  </div>
+{% endfor %}
+
+</body>
+</html>
